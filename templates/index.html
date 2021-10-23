@@ -57,7 +57,7 @@ h1 {
 
 <form action="/open" method="get">
   <input type="text" id="submited_text" name="website" value="https://www.youtube.com/watch?v=dQw4w9WgXcQ" size="50"><br>
-  
+  <!---
   <section id="buttons">
     <input type="radio" id="webpage" name="method" value="webpage" checked="checked">
     <label for="webpage">Webpage</label><br>
@@ -66,8 +66,11 @@ h1 {
     <input type="radio" id="lucky" name="method" value="lucky">
     <label for="lucky">I'm feeling lucky</label><hr>
    </section>
- 
-  <input type="submit" value="Submit" class="button">
+  --->
+  <input type="submit" name="method" value="Webpage" class="button">
+  <input type="submit" name="method" value="Video" class="button">
+  <input type="submit" name="method" value="Lucky" class="button">
+  <!input type="submit" value="Submit" class="button">
 </form>
 </section>
 </body>
