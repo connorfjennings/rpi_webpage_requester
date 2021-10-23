@@ -3,34 +3,50 @@
 <head>
 <style>
 body {
-  background-color: rgb(57, 169, 219);
+  background-color: #3B7EA1;
   font-family: Rubik, Arial;
 }
 
 form {
-  text-align: justify;
   line-height: 30px;
   height: 80%;
-  margin: 3% 35%;
+  margin: 3% auto;
   width: 80%;
   overflow: auto;
 }
 
-form hr {
-  width: 50%;
-}
-
 h1 {
   text-align: center;
+  color: white;
   margin: 3% auto;
+  width: 60%;
+  background-color: #003262;
+  border-radius: 10px;
 }
 
 #overlay {
   width: 80%;
+  text-align: center;
   margin: 3% auto;
   height: 95vh;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: #EEEEEE;
   border-radius: 40px;
+}
+#buttons {
+  text-align: left;
+  margin: 3% 30%;
+}
+.button {
+  background-color: #C4820E;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
 }
 </style>
 </head>
@@ -40,14 +56,16 @@ h1 {
 <h1>Super Cool Website</h1>
 
 <form action="/open" method="get">
-  <input type="text" id="submited_text" name="website" value="https://www.youtube.com/watch?v=dQw4w9WgXcQ"><br><br>
+  <input type="text" id="submited_text" name="website" value="https://www.youtube.com/watch?v=dQw4w9WgXcQ" size="50"><br>
   
-  <input type="radio" id="webpage" name="method" value="webpage" checked="checked">
-  <label for="webpage">Webpage</label><br>
-  <input type="radio" id="video" name="method" value="video">
-  <label for="video">Video</label><br>
-  <input type="radio" id="lucky" name="method" value="lucky">
-  <label for="lucky">I'm feeling lucky</label><br><br>
+  <section id="buttons">
+    <input type="radio" id="webpage" name="method" value="webpage" checked="checked">
+    <label for="webpage">Webpage</label><br>
+    <input type="radio" id="video" name="method" value="video">
+    <label for="video">Video</label><br>
+    <input type="radio" id="lucky" name="method" value="lucky">
+    <label for="lucky">I'm feeling lucky</label><hr>
+   </section>
  
   <input type="submit" value="Submit" class="button">
 </form>
