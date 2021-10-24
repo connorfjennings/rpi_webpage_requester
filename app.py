@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template
 import threading
-from .utils import extract_info_from_search, extract_info_from_url
+from utils import extract_info_from_search, extract_info_from_url, play_video_url
+
 app = Flask(__name__)
 videoQ = []
 Qsema = threading.Semaphore(value=0)
@@ -9,7 +10,9 @@ def runQueue():
 		Qsema.acquire()
 		info_dict = videoQ.pop(0)
 		url = info_dict.get("url", None)
-		
+		player = play_video_url(url)
+
+
 
 
 @app.route('/')
