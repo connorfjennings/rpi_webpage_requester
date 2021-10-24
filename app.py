@@ -60,8 +60,6 @@ def open():
 		videoQ.append(info_dict)
 		Qlock.release()
 		Qsema.release()
-	passQ = videoQ.copy()
-	videoQ.sort(reverse = True, key = lambda x: x["votes"])
 	return redirect("/success")
 
 
@@ -73,15 +71,12 @@ def vote(id):
 		info_dict["votes"] += 1
 	elif (vote == "downvote"):
 		info_dict["votes"] -= 1
-	videoQ.sort(reverse = True, key = lambda x: x["votes"])
-	passQ = videoQ.copy()
 	return redirect("/success")
 
 @app.route('/close')
 def close():
 	global player
 	player.quit()
-	passQ = videoQ.copy()
 	return redirect("/success")
 
 
