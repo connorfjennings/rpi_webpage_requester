@@ -52,6 +52,7 @@ def open():
 		Qlock.release()
 		Qsema.release()
 		passQ = videoQ.copy()
+	videoQ.sort(reverse = True, key = lambda x: x["votes"])
 	return render_template("success.html", length = len(passQ), videos = passQ)
 
 
@@ -63,6 +64,7 @@ def vote(id):
 		info_dict["votes"] += 1
 	elif (vote == "downvote"):
 		info_dict["votes"] -= 1
+	videoQ.sort(reverse = True, key = lambda x: x["votes"])
 	passQ = videoQ.copy()
 	return render_template("success.html", length = len(passQ), videos = passQ)
 
@@ -70,7 +72,7 @@ def vote(id):
 def close():
 	global player
 	player.quit()
-	return render_template("index.html")
+	return render_template("success.html", length = len(passQ), videos = passQ)
 
 
 
