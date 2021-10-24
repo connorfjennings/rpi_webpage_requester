@@ -50,7 +50,7 @@ def open():
 		videoQ.append(info_dict)
 		Qlock.release()
 		Qsema.release()
-	return render_template("index.html")
+	return render_template("success.html")
 
 @app.route('/vote')
 def vote():
