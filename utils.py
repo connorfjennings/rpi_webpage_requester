@@ -1,9 +1,7 @@
 from __future__ import unicode_literals
-import youtube_dl
+from omxplayer.player import OMXPlayer
 
-ydl_opts = {'simulate':True, 'forceurl':True, 'forcetitle':True, 'format':'mp4'}
-with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-    ydl.extract_info(['https://www.youtube.com/watch?v=BaW_jenozKc'])
+import youtube_dl
 
 def extract_info_from_url(url, ovverride_args = {}):
     """
@@ -39,3 +37,15 @@ def extract_info_from_search(search, ovverride_args = {}):
     url = "ytsearch:" + search
     return extract_info_from_url(url, ovverride_args)
 
+def play_video_url(url):
+    """
+        Displays the video from a direct url.
+
+        Arguments:
+        url - a direct video url that points to a filename (preferably mp4 for rpi)
+
+        Returns:
+        player - an omxplayer object that can be terminated early using player.quit()
+    """
+
+    return OMXPlayer(url)
