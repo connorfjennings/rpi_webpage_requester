@@ -65,7 +65,7 @@ def upvote():
 		info_dict["votes"] += 1
 	elif (downvote):
 		info_dict = videoDic['downvote']
-		info_dict["votes"] += 1
+		info_dict["votes"] -= 1
 	return render_template("success.html", length = len(passQ), videos = passQ)
 
 @app.route('/close')

@@ -86,7 +86,7 @@ div {
   <div>
     {%for i in range(0,length)%}
     <form action="/vote" method="get">
-      <p> {{videos[i].title}} </p>
+      <p> {{videos[i].title}} : {{videos[i].votes}} </p>
       <button name="upvote" value={{videos[i].id}} type="submit">Upvote</button>
       <button name="downvote" value={{videos[i].id}} type="submit">Downvote</button>
     </form>
