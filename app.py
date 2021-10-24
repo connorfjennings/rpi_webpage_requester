@@ -6,15 +6,18 @@ app = Flask(__name__)
 videoQ = []
 Qsema = threading.Semaphore(value=0)
 playSema = threading.Semaphore(value=0)
+Qlock = threading.Lock()
 def runQueue():
 	while True:
 		Qsema.acquire()
+		Qlock.acquire()
 		info_dict = videoQ.pop(0)
 		url = info_dict.get("url", None)
 		player = play_video_url(url, videoEndedCallback)
+		Qlock.release()
 		playSema.acquire()
 
-def videoEndedCallback():
+def videoEndedCallback(arg1, arg2):
 	playSema.release()
 
 
@@ -29,11 +32,15 @@ def open():
 	radio = request.args['method']
 	if (radio == "Video"):
 		info = extract_info_from_url(website)
+		Qlock.acquire()
 		videoQ.append(info)
+		Qlock.release()
 		Qsema.release()
 	elif (radio == "Lucky"):
 		info = extract_info_from_search(website)
+		Qlock.acquire()
 		videoQ.append(info)
+		Qlock.release()
 		Qsema.release()
 	return render_template("index.html")
 
