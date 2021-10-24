@@ -51,11 +51,13 @@ def open():
 		videoQ.append(info_dict)
 		Qlock.release()
 		Qsema.release()
+		passQ = videoQ.copy()
 	return render_template("success.html", length = len(videoQ), videos = videoQ)
 
 @app.route('/vote')
 def upvote():
-	return render_template("success.html", length = len(videoQ), videos = videoQ)
+	passQ = videoQ.copy()
+	return render_template("success.html", length = len(passQ), videos = passQ)
 
 @app.route('/close')
 def close():
