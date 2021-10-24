@@ -9,13 +9,15 @@ playSema = threading.Semaphore(value=0)
 Qlock = threading.Lock()
 videoDic = {}
 player = None
+currentlyPlaying = "None :("
 def runQueue():
 	while True:
-		global player
+		global player, currentlyPlaying
 		Qsema.acquire()
 		Qlock.acquire()
 		videoQ.sort(reverse = True, key = lambda x: x["votes"])
 		info_dict = videoQ.pop(0)
+		currentlyPlaying = info_dict["title"]
 		videoDic.pop(info_dict["id"])
 		url = info_dict.get("url", None)
 		player = play_video_url(url, videoEndedCallback)
@@ -33,6 +35,7 @@ def index():
 
 @app.route('/open')
 def open():
+	global currentlyPlaying
 	website = request.args['website']
 	radio = request.args['method']
 	if (radio == "Video"):
@@ -51,13 +54,14 @@ def open():
 		videoQ.append(info_dict)
 		Qlock.release()
 		Qsema.release()
-		passQ = videoQ.copy()
+	passQ = videoQ.copy()
 	videoQ.sort(reverse = True, key = lambda x: x["votes"])
-	return render_template("success.html", length = len(passQ), videos = passQ)
+	return render_template("success.html", length = len(passQ), videos = passQ, playing = currentlyPlaying)
 
 
 @app.route('/vote/<id>')
 def vote(id):
+	global currentlyPlaying
 	vote = request.args['vote']
 	info_dict = videoDic[id]
 	if (vote == "upvote"):
@@ -66,14 +70,14 @@ def vote(id):
 		info_dict["votes"] -= 1
 	videoQ.sort(reverse = True, key = lambda x: x["votes"])
 	passQ = videoQ.copy()
-	return render_template("success.html", length = len(passQ), videos = passQ)
+	return render_template("success.html", length = len(passQ), videos = passQ, playing = currentlyPlaying)
 
 @app.route('/close')
 def close():
-	global player
+	global player, currentlyPlaying
 	player.quit()
 	passQ = videoQ.copy()
-	return render_template("success.html", length = len(passQ), videos = passQ)
+	return render_template("success.html", length = len(passQ), videos = passQ, playing = currentlyPlaying)
 
 
 
