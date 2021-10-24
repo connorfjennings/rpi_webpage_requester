@@ -54,6 +54,7 @@ def open():
 		passQ = videoQ.copy()
 	return render_template("success.html", length = len(passQ), videos = passQ)
 
+
 @app.route('/vote')
 def upvote():
 	passQ = videoQ.copy()
