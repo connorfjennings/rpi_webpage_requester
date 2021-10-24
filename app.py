@@ -51,7 +51,7 @@ def open():
 		videoQ.append(info_dict)
 		Qlock.release()
 		Qsema.release()
-	return render_template("success.html")
+	return render_template("success.html", length = len(videoQ), videos = videoQ)
 
 @app.route('/upvote')
 def upvote():
