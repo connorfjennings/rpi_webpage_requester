@@ -1,12 +1,15 @@
 from flask import Flask, request, render_template
 import threading
+from .utils import extract_info_from_search, extract_info_from_url
 app = Flask(__name__)
 videoQ = []
 Qsema = threading.Semaphore(value=0)
 def runQueue():
 	while True:
 		Qsema.acquire()
-		print("HERE IT IS: " + videoQ.pop(0))
+		info_dict = videoQ.pop(0)
+		url = info_dict.get("url", None)
+		
 
 
 @app.route('/')
@@ -19,7 +22,12 @@ def open():
 	website = request.args['website']
 	radio = request.args['method']
 	if (radio == "Video"):
-		videoQ.append(website)
+		info = extract_info_from_url(website)
+		videoQ.append(info)
+		Qsema.release()
+	elif (radio == "Lucky"):
+		info = extract_info_from_search(website)
+		videoQ.append(info)
 		Qsema.release()
 	return render_template("index.html")
 
