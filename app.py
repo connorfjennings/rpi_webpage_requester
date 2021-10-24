@@ -30,13 +30,15 @@ def videoEndedCallback(arg1, arg2):
 
 @app.route('/')
 def index():
-	return render_template("index.html")
+	return redirect("/success")
 
 @app.route('/success')
 def success():
 	global currentlyPlaying
 	passQ = videoQ.copy()
 	videoQ.sort(reverse = True, key = lambda x: x["votes"])
+	if len(videoQ) == 0:
+		currentlyPlaying = "None :("
 	return render_template("success.html", length = len(passQ), videos = passQ, playing = currentlyPlaying)
 
 
