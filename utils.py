@@ -35,7 +35,8 @@ def extract_info_from_search(search, ovverride_args = {}):
     """
 
     url = "ytsearch:" + search
-    return extract_info_from_url(url, ovverride_args)
+    all_vids = extract_info_from_url(url, ovverride_args)
+    return all_vids.get('entries')[0]
 
 def play_video_url(url, callback):
     """
