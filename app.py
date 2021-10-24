@@ -7,15 +7,15 @@ videoQ = []
 Qsema = threading.Semaphore(value=0)
 playSema = threading.Semaphore(value=0)
 Qlock = threading.Lock()
-videoDic = {}
+#videoDic = {}
 player = None
 def runQueue():
 	while True:
 		Qsema.acquire()
 		Qlock.acquire()
-		videoQ.sort(reverse = True, key = lambda x, y: x["votes"] > y["votes"])
+		#videoQ.sort(reverse = True, key = lambda x, y: x["votes"] > y["votes"])
 		info_dict = videoQ.pop(0)
-		videoDic.pop(info_dict["id"])
+		#videoDic.pop(info_dict["id"])
 		url = info_dict.get("url", None)
 		player = play_video_url(url, videoEndedCallback)
 		Qlock.release()
@@ -36,26 +36,26 @@ def open():
 	radio = request.args['method']
 	if (radio == "Video"):
 		info_dict = extract_info_from_url(website)
-		info_dict["votes"] = 1
-		videoDic[info_dict["id"]] = info_dict
+		#info_dict["votes"] = 1
+		#videoDic[info_dict["id"]] = info_dict
 		Qlock.acquire()
 		videoQ.append(info_dict)
 		Qlock.release()
 		Qsema.release()
 	elif (radio == "Lucky"):
 		info_dict = extract_info_from_search(website)
-		info_dict["votes"] = 1
-		videoDic[info_dict["id"]] = info_dict
+		#info_dict["votes"] = 1
+		#videoDic[info_dict["id"]] = info_dict
 		Qlock.acquire()
 		videoQ.append(info_dict)
 		Qlock.release()
 		Qsema.release()
 	return render_template("success.html")
 
-@app.route('/vote')
-def vote():
-	website = request.args['website']
-	return render_template("index.html")
+#@app.route('/vote')
+#def vote():
+	#website = request.args['website']
+	#return render_template("index.html")
 
 @app.route('/close')
 def close():
