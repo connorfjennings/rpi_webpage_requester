@@ -53,7 +53,7 @@ def open():
 		Qsema.release()
 	return render_template("success.html", length = len(videoQ), videos = videoQ)
 
-@app.route('/upvote')
+@app.route('/vote')
 def upvote():
 	return render_template("success.html", length = len(videoQ), videos = videoQ)
 
