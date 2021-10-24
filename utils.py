@@ -37,15 +37,18 @@ def extract_info_from_search(search, ovverride_args = {}):
     url = "ytsearch:" + search
     return extract_info_from_url(url, ovverride_args)
 
-def play_video_url(url):
+def play_video_url(url, callback):
     """
         Displays the video from a direct url.
 
         Arguments:
         url - a direct video url that points to a filename (preferably mp4 for rpi)
+        callback - a function that will be called upon video termination
 
         Returns:
         player - an omxplayer object that can be terminated early using player.quit()
     """
 
-    return OMXPlayer(url)
+    player = OMXPlayer(url)
+    player.exitEvent += callback
+    return player
