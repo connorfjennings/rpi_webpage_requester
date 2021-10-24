@@ -55,17 +55,15 @@ def open():
 	return render_template("success.html", length = len(passQ), videos = passQ)
 
 
-@app.route('/vote')
-def upvote():
-	passQ = videoQ.copy()
-	upvote = request.args['upvote']
-	downvote = request.args['downvote']
-	if (upvote):
-		info_dict = videoDic['upvote']
+@app.route('/vote/<id>')
+def vote(id):
+	vote = request.args['vote']
+	info_dict = videoDic[id]
+	if (vote == "upvote"):
 		info_dict["votes"] += 1
-	elif (downvote):
-		info_dict = videoDic['downvote']
+	elif (vote == "downvote"):
 		info_dict["votes"] -= 1
+	passQ = videoQ.copy()
 	return render_template("success.html", length = len(passQ), videos = passQ)
 
 @app.route('/close')
