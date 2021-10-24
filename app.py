@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect
 import threading
 from utils import extract_info_from_search, extract_info_from_url, play_video_url
 
@@ -32,10 +32,16 @@ def videoEndedCallback(arg1, arg2):
 def index():
 	return render_template("index.html")
 
+@app.route('/success')
+def success():
+	global currentlyPlaying
+	passQ = videoQ.copy()
+	videoQ.sort(reverse = True, key = lambda x: x["votes"])
+	return render_template("success.html", length = len(passQ), videos = passQ, playing = currentlyPlaying)
+
 
 @app.route('/open')
 def open():
-	global currentlyPlaying
 	website = request.args['website']
 	radio = request.args['method']
 	if (radio == "Video"):
@@ -56,12 +62,11 @@ def open():
 		Qsema.release()
 	passQ = videoQ.copy()
 	videoQ.sort(reverse = True, key = lambda x: x["votes"])
-	return render_template("success.html", length = len(passQ), videos = passQ, playing = currentlyPlaying)
+	return redirect("/success")
 
 
 @app.route('/vote/<id>')
 def vote(id):
-	global currentlyPlaying
 	vote = request.args['vote']
 	info_dict = videoDic[id]
 	if (vote == "upvote"):
@@ -70,14 +75,14 @@ def vote(id):
 		info_dict["votes"] -= 1
 	videoQ.sort(reverse = True, key = lambda x: x["votes"])
 	passQ = videoQ.copy()
-	return render_template("success.html", length = len(passQ), videos = passQ, playing = currentlyPlaying)
+	return redirect("/success")
 
 @app.route('/close')
 def close():
-	global player, currentlyPlaying
+	global player
 	player.quit()
 	passQ = videoQ.copy()
-	return render_template("success.html", length = len(passQ), videos = passQ, playing = currentlyPlaying)
+	return redirect("/success")
 
 
 
