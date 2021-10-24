@@ -9,7 +9,6 @@ body {
 
 form {
   line-height: 30px;
-  height: 80%;
   margin: 3% auto;
   width: 80%;
   overflow: auto;
@@ -19,59 +18,58 @@ h1 {
   text-align: center;
   color: white;
   margin: 3% auto;
+  padding: 1% 1%;
   width: 60%;
   background-color: #003262;
   border-radius: 10px;
 }
 
-#overlay {
+#inputBox {
   width: 80%;
   text-align: center;
   margin: 3% auto;
-  height: 95vh;
+  height: 50vh;
   background-color: #EEEEEE;
   border-radius: 40px;
 }
-#buttons {
-  text-align: left;
-  margin: 3% 30%;
+#thumbnail {
+  width: 30vh;
+  text-align: center;
+  margin: auto auto;
+  height: 20vh;
 }
 .button {
   background-color: #C4820E;
   border: none;
   color: white;
-  padding: 15px 32px;
+  padding: 3% 5%;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
-  margin: 4px 2px;
+  margin: 1% 1%;
   cursor: pointer;
 }
 </style>
 </head>
 <body>
-<section id="overlay">
+<section id="inputBox">
 <br>
 <h1>Super Cool Website</h1>
-
 <form action="/open" method="get">
-  <input type="text" id="submited_text" name="website" value="https://www.youtube.com/watch?v=dQw4w9WgXcQ" size="50"><br>
-  <!---
-  <section id="buttons">
-    <input type="radio" id="webpage" name="method" value="webpage" checked="checked">
-    <label for="webpage">Webpage</label><br>
-    <input type="radio" id="video" name="method" value="video">
-    <label for="video">Video</label><br>
-    <input type="radio" id="lucky" name="method" value="lucky">
-    <label for="lucky">I'm feeling lucky</label><hr>
-   </section>
-  --->
+  <input type="text" id="submited_text" name="website" size="50"><br>
   <input type="submit" name="method" value="Webpage" class="button">
   <input type="submit" name="method" value="Video" class="button">
   <input type="submit" name="method" value="Lucky" class="button">
-  <!input type="submit" value="Submit" class="button">
 </form>
+<form action="/close" method="get">
+	<input type="submit" name="method" value="Clear Queue" class="button">
+</form>
+</section>
+<section id="inputBox">
+<br>
+<h4>Rickroll</h4>
+<img src="https://cdn.vox-cdn.com/thumbor/HWPOwK-35K4Zkh3_t5Djz8od-jE=/0x86:1192x710/fit-in/1200x630/cdn.vox-cdn.com/uploads/chorus_asset/file/22312759/rickroll_4k.jpg" alt="thumbnail" id="thumbnail">
 </section>
 </body>
 </html>
