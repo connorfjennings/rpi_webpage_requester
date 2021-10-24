@@ -72,6 +72,7 @@ def vote(id):
 def close():
 	global player
 	player.quit()
+	passQ = videoQ.copy()
 	return render_template("success.html", length = len(passQ), videos = passQ)
 
 
