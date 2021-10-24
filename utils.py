@@ -19,7 +19,7 @@ def extract_info_from_url(url, ovverride_args = {}):
             id - the unique id of the video
             
     """
-    ydl_opts = {'simulate':True, 'forceurl':True, 'forcetitle':True, 'format':'mp4'}
+    ydl_opts = {'simulate':True, 'forceurl':True, 'forcetitle':True, 'format':'[ext=mp4][height<=720]'}
     ydl_opts.update(ovverride_args)
 
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:

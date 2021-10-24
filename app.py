@@ -11,9 +11,10 @@ Qlock = threading.Lock()
 player = None
 def runQueue():
 	while True:
+		global player
 		Qsema.acquire()
 		Qlock.acquire()
-		#videoQ.sort(reverse = True, key = lambda x, y: x["votes"] > y["votes"])
+		#videoQ.sort(reverse = True, key = lambda x: x["votes"])
 		info_dict = videoQ.pop(0)
 		#videoDic.pop(info_dict["id"])
 		url = info_dict.get("url", None)
@@ -52,13 +53,14 @@ def open():
 		Qsema.release()
 	return render_template("success.html")
 
-#@app.route('/vote')
-#def vote():
-	#website = request.args['website']
-	#return render_template("index.html")
+@app.route('/vote')
+def vote():
+	vote = request.args['vote']
+	return render_template("index.html")
 
 @app.route('/close')
 def close():
+	global player
 	player.quit()
 	return render_template("index.html")
 
