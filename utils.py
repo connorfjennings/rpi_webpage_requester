@@ -47,7 +47,7 @@ def play_video_url(url, callback):
         callback - a function that will be called upon video termination
 
         Returns:
-        player - an omxplayer object that can be terminated early using player.quit()
+        player - a vlc object that can be terminated early using player.quit()
     """
 
     media_player = vlc.MediaPlayer()

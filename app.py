@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect
 import threading
 from utils import extract_info_from_search, extract_info_from_url, play_video_url
 
@@ -7,16 +7,18 @@ videoQ = []
 Qsema = threading.Semaphore(value=0)
 playSema = threading.Semaphore(value=0)
 Qlock = threading.Lock()
-#videoDic = {}
+videoDic = {}
 player = None
+currentlyPlaying = "None :("
 def runQueue():
 	while True:
-		global player
+		global player, currentlyPlaying
 		Qsema.acquire()
 		Qlock.acquire()
-		#videoQ.sort(reverse = True, key = lambda x: x["votes"])
+		videoQ.sort(reverse = True, key = lambda x: x["votes"])
 		info_dict = videoQ.pop(0)
-		#videoDic.pop(info_dict["id"])
+		currentlyPlaying = info_dict["title"]
+		videoDic.pop(info_dict["id"])
 		url = info_dict.get("webpage_url", None)
 		player = play_video_url(url, videoEndedCallback)
 		Qlock.release()
@@ -28,7 +30,16 @@ def videoEndedCallback(arg1):
 
 @app.route('/')
 def index():
-	return render_template("index.html")
+	return redirect("/success")
+
+@app.route('/success')
+def success():
+	global currentlyPlaying
+	passQ = videoQ.copy()
+	videoQ.sort(reverse = True, key = lambda x: x["votes"])
+	if len(videoQ) == 0:
+		currentlyPlaying = "None :("
+	return render_template("success.html", length = len(passQ), videos = passQ, playing = currentlyPlaying)
 
 
 @app.route('/open')
@@ -37,31 +48,38 @@ def open():
 	radio = request.args['method']
 	if (radio == "Video"):
 		info_dict = extract_info_from_url(website)
-		#info_dict["votes"] = 1
-		#videoDic[info_dict["id"]] = info_dict
+		info_dict["votes"] = 1
+		videoDic[info_dict["id"]] = info_dict
 		Qlock.acquire()
 		videoQ.append(info_dict)
 		Qlock.release()
 		Qsema.release()
 	elif (radio == "Lucky"):
 		info_dict = extract_info_from_search(website)
-		#info_dict["votes"] = 1
-		#videoDic[info_dict["id"]] = info_dict
+		info_dict["votes"] = 1
+		videoDic[info_dict["id"]] = info_dict
 		Qlock.acquire()
 		videoQ.append(info_dict)
 		Qlock.release()
 		Qsema.release()
-	return render_template("success.html", length = len(videoQ), videos = videoQ)
+	return redirect("/success")
 
-@app.route('/upvote')
-def upvote():
-	return render_template("success.html", length = len(videoQ), videos = videoQ)
+
+@app.route('/vote/<id>')
+def vote(id):
+	vote = request.args['vote']
+	info_dict = videoDic[id]
+	if (vote == "upvote"):
+		info_dict["votes"] += 1
+	elif (vote == "downvote"):
+		info_dict["votes"] -= 1
+	return redirect("/success")
 
 @app.route('/close')
 def close():
 	global player
 	player.quit()
-	return render_template("index.html")
+	return redirect("/success")
 
 
 
