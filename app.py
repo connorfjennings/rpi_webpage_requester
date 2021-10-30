@@ -17,12 +17,12 @@ def runQueue():
 		#videoQ.sort(reverse = True, key = lambda x: x["votes"])
 		info_dict = videoQ.pop(0)
 		#videoDic.pop(info_dict["id"])
-		url = info_dict.get("url", None)
+		url = info_dict.get("webpage_url", None)
 		player = play_video_url(url, videoEndedCallback)
 		Qlock.release()
 		playSema.acquire()
 
-def videoEndedCallback(arg1, arg2):
+def videoEndedCallback(arg1):
 	playSema.release()
 
 

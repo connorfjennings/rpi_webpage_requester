@@ -1,5 +1,5 @@
 from __future__ import unicode_literals
-from omxplayer.player import OMXPlayer
+import vlc
 
 import youtube_dl
 
@@ -19,7 +19,7 @@ def extract_info_from_url(url, ovverride_args = {}):
             id - the unique id of the video
             
     """
-    ydl_opts = {'simulate':True, 'forceurl':True, 'forcetitle':True, 'format':'[ext=mp4][height<=720]'}
+    ydl_opts = {'simulate':True, 'forceurl':True, 'forcetitle':True, 'format':'[ext=mp4][height<=480]'}
     ydl_opts.update(ovverride_args)
 
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
@@ -50,6 +50,10 @@ def play_video_url(url, callback):
         player - an omxplayer object that can be terminated early using player.quit()
     """
 
-    player = OMXPlayer(url)
-    player.exitEvent += callback
-    return player
+    media_player = vlc.MediaPlayer()
+    media = vlc.Media(url)
+    media_player.set_media(media)
+    media_player.play()
+
+    events = media_player.event_manager()
+    events.event_attach(vlc.EventType.MediaPlayerStopped, callback)
