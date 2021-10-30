@@ -1,5 +1,5 @@
 from __future__ import unicode_literals
-import vlc
+import subprocess
 
 import youtube_dl
 
@@ -38,22 +38,16 @@ def extract_info_from_search(search, ovverride_args = {}):
     all_vids = extract_info_from_url(url, ovverride_args)
     return all_vids.get('entries')[0]
 
-def play_video_url(url, callback):
+def play_video_url(url):
     """
         Displays the video from a direct url.
 
         Arguments:
         url - a direct video url that points to a filename (preferably mp4 for rpi)
-        callback - a function that will be called upon video termination
 
         Returns:
-        player - a vlc object that can be terminated early using player.quit()
+        process - a subprocess that must be terminated before calling this function again.
     """
-
-    media_player = vlc.MediaPlayer()
-    media = vlc.Media(url)
-    media_player.set_media(media)
-    media_player.play()
-
-    events = media_player.event_manager()
-    events.event_attach(vlc.EventType.MediaPlayerStopped, callback)
+    
+    process = subprocess.Popen(["vlc", "-f", url])
+    return process

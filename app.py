@@ -1,5 +1,7 @@
-from flask import Flask, request, render_template, redirect
+import vlc
 import threading
+
+from flask import Flask, request, render_template, redirect
 from utils import extract_info_from_search, extract_info_from_url, play_video_url
 
 app = Flask(__name__)
@@ -10,6 +12,7 @@ Qlock = threading.Lock()
 videoDic = {}
 player = None
 currentlyPlaying = "None :("
+
 def runQueue():
 	while True:
 		global player, currentlyPlaying
@@ -20,12 +23,9 @@ def runQueue():
 		currentlyPlaying = info_dict["title"]
 		videoDic.pop(info_dict["id"])
 		url = info_dict.get("webpage_url", None)
-		player = play_video_url(url, videoEndedCallback)
+		player = play_video_url(url)
 		Qlock.release()
 		playSema.acquire()
-
-def videoEndedCallback(arg1):
-	playSema.release()
 
 
 @app.route('/')
@@ -78,7 +78,8 @@ def vote(id):
 @app.route('/close')
 def close():
 	global player
-	player.quit()
+	player.kill()
+	playSema.release()
 	return redirect("/success")
 
 
